@@ -1,12 +1,16 @@
 package WWW::Clockify::Role::API;
 
 use Modern::Perl;
+
 use Moose::Role;
+
+use Mojo::URL;
 use Mojo::UserAgent;
 
 has 'api_key' => (
-  is      => 'ro',
+  is      => 'rw',
   isa     => 'Str',
+  lazy    => 1,
   default => sub {
     $ENV{CLOCKIFY_API_KEY};
   },
@@ -22,9 +26,8 @@ has 'base_url' => (
 has 'agent' => (
   is      => 'ro',
   isa     => 'Mojo::UserAgent',
-  default => sub {
-    Mojo::UserAgent->new();
-  },
+  lazy    => 1,
+  builder => '_build_agent',
 );
 
 has 'workspace_id' => (
@@ -32,11 +35,29 @@ has 'workspace_id' => (
   isa => 'Str',
 );
 
+has '_res' => (
+  is  => 'rw',
+  isa => 'HashRef',
+);
+
+sub _build_agent ($self) {
+  my $agent = Mojo::UserAgent->new();
+
+  $agent->on(
+    start => sub ($ua, $tx) {
+      $tx->req->headers->header('X-Api-Key' => $self->api_key);
+    }
+  );
+
+  return $agent;
+}
+
 sub _build_base_url ($self) {
   return Mojo::URL->new('https://api.clockify.me/api');
 }
 
 sub get ($self) {
+  my $res = $self->agent->get($self->url);
 }
 
 sub put ($self) {
