@@ -12,6 +12,13 @@ has 'api_key' => (
   },
 );
 
+has 'base_url' => (
+  is      => 'ro',
+  isa     => 'Mojo::URL',
+  lazy    => 1,
+  builder => '_build_base_url',
+);
+
 has 'agent' => (
   is      => 'ro',
   isa     => 'Mojo::UserAgent',
@@ -25,10 +32,17 @@ has 'workspace_id' => (
   isa => 'Str',
 );
 
-sub list ($self) {
+sub _build_base_url ($self) {
+  return Mojo::URL->new('https://api.clockify.me/api');
 }
 
-sub create ($self) {
+sub get ($self) {
+}
+
+sub put ($self) {
+}
+
+sub delete ($self) {
 }
 
 no Moose;
