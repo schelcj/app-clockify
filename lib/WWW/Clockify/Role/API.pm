@@ -44,8 +44,12 @@ sub _build_agent ($self) {
   my $agent = Mojo::UserAgent->new();
 
   $agent->on(
-    start => sub ($ua, $tx) {
-      $tx->req->headers->header('X-Api-Key' => $self->api_key);
+    start => sub {
+      my ($ua, $tx) = @_;
+
+      $tx->req->headers->header('X-Api-Key'    => $self->api_key);
+      $tx->req->headers->header('Content-Type' => 'application/json');
+      $tx->req->headers->header('Accept'       => 'application/json');
     }
   );
 
@@ -58,6 +62,16 @@ sub _build_base_url ($self) {
 
 sub get ($self) {
   my $res = $self->agent->get($self->url);
+  if ($res->is_error) {
+    # TODO
+  }
+
+  $self->_res($res->result);
+
+  return $res->result->json;
+}
+
+sub post ($self) {
 }
 
 sub put ($self) {
