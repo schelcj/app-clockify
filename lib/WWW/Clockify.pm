@@ -33,13 +33,13 @@ has '_projects' => (
   }
 );
 
-sub _build_workspaces ($self) {
+sub _build_workspaces($self) {
   for (WWW::Clockify::Workspace->all()) {
     $self->add_workspace($_);
   }
 }
 
-sub _build_projects ($self) {
+sub _build_projects($self) {
   for (WWW::Clockify::Project->all) {
     $self->add_project($_);
   }

@@ -3,7 +3,7 @@
 use FindBin;
 BEGIN {
   unshift @INC, "$FindBin::Bin/../lib";
-  unshift @INC, "$FindBin::Bin/t";
+  unshift @INC, "$FindBin::Bin/tests";
 };
 
 use Test::WWW::Clockify;

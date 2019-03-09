@@ -2,7 +2,10 @@ package WWW::Clockify::Workspace;
 
 use Moose;
 
-with 'WWW::Clockify::API';
+with qw(
+  WWW::Clockify::Role::Config
+  WWW::Clockify::Role::API
+);
 
 has '_path' => (
   is      => 'ro',

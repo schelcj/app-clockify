@@ -7,14 +7,7 @@ use Moose::Role;
 use Mojo::URL;
 use Mojo::UserAgent;
 
-has 'api_key' => (
-  is      => 'rw',
-  isa     => 'Str',
-  lazy    => 1,
-  default => sub {
-    $ENV{CLOCKIFY_API_KEY};
-  },
-);
+requires 'api_key';
 
 has 'base_url' => (
   is      => 'ro',
@@ -40,7 +33,7 @@ has '_res' => (
   isa => 'HashRef',
 );
 
-sub _build_agent ($self) {
+sub _build_agent($self) {
   my $agent = Mojo::UserAgent->new();
 
   $agent->on(
@@ -56,12 +49,13 @@ sub _build_agent ($self) {
   return $agent;
 }
 
-sub _build_base_url ($self) {
+sub _build_base_url($self) {
   return Mojo::URL->new('https://api.clockify.me/api');
 }
 
-sub get ($self) {
+sub get($self) {
   my $res = $self->agent->get($self->url);
+
   if ($res->is_error) {
     # TODO
   }
@@ -71,13 +65,13 @@ sub get ($self) {
   return $res->result->json;
 }
 
-sub post ($self) {
+sub post($self) {
 }
 
-sub put ($self) {
+sub put($self) {
 }
 
-sub delete ($self) {
+sub delete($self) {
 }
 
 no Moose;
